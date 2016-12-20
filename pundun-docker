@@ -1,8 +1,19 @@
 #!/bin/sh
+get_git_tags()
+{
+    local tags="$(git ls-remote --tags https://github.com/pundunlabs/pundun.git | cut -d "/" -f 3 |grep -v -|grep -v {| sort -n -t. -k1 -k2 -k3 -r)";
+    echo "$tags" | awk '{tags[NR] = $0} END{for (x = 1; x <= NR; x++) {printf("pundun-%s\n",  tags[x])} }';
+}
+
+print_git_tags()
+{
+    local tags="$(get_git_tags)"
+    echo "$tags" | awk '{tags[NR] = $0} END{for (x = 1; x <= NR; x++) {printf(" | %s ",  tags[x])} }';
+}
 
 print_usage()
 {
-    echo "usage: pundun-docker COMMAND\n\rCOMMAND:\n\r\t build REPO TAG | run REPO TAG | stop REPO TAG | rm REPO TAG | attach REPO TAG\n\rREPO:\n\r\t pundun-ready | pundun-master\n\rTAG:\n\r\t ubuntu-16.04 | centos-6.7"
+    echo "usage: pundun-docker COMMAND\n\rCOMMAND:\n\r\t build REPO TAG | run REPO TAG | stop REPO TAG | rm REPO TAG | attach REPO TAG\n\rREPO:\n\r\t pundun-ready | pundun-master" `print_git_tags` "\n\rTAG:\n\r\t ubuntu-16.04 | centos-6.7"
 }
 
 if [ -z $2 ] || [ -z $3 ]; then
@@ -19,12 +30,26 @@ else
 	    docker rm $2-$3
 	    ;;
 	"build")
-	    (cd $2/$3; docker build -t pundunlabs/$2:$3 .)
+	    if [ ! -d "$2" ]; then
+		cp -r pundun-master $2
+		prefix="pundun-"
+		tag=${2#"pundun-"}
+		sed -i '/^RUN git clone.*pundun.git/a \
+WORKDIR pundun/ \
+RUN git fetch --all \
+RUN git fetch -t \
+RUN git checkout -b '"$tag"' '"$tag"' ' $2/*/Dockerfile
+		sed -i 's/pundun-v\([0-9]\+\.\)\([0-9]\+\.\)\([0-9]\+\)/'"$2"'/g ' $2/*/Dockerfile
+	    fi
+	    (cd $2/$3; docker build --no-cache -t pundunlabs/$2:$3 .)
 	    ;;
 	"attach")
 	    ipport=`docker port $2-$3 22`
 	    port=`echo ${ipport##*:}`
-	    ssh root@0.0.0.0 -p $port -t '/bin/bash'
+	    ssh pundun@0.0.0.0 -p $port -t '/bin/bash'
+	    ;;
+	"fetch_tar")
+	    docker cp $2-$3:/home/pundun/$2.tar.gz .
 	    ;;
 	*)
 	    print_usage
