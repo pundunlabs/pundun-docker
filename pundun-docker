@@ -34,8 +34,7 @@ else
 		cp -r pundun-master $2
 		prefix="pundun-"
 		tag=${2#"pundun-"}
-		sed -i '/^RUN git clone.*pundun.git/a \
-WORKDIR pundun/ \
+		sed -i '/^WORKDIR pundun/a \
 RUN git fetch --all \
 RUN git fetch -t \
 RUN git checkout -b '"$tag"' '"$tag"' ' $2/*/Dockerfile

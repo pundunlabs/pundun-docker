@@ -6,7 +6,7 @@ RUN source scl_source enable devtoolset-4
 RUN mkdir artifacts 
 WORKDIR ./artifacts/
 RUN git clone https://github.com/pundunlabs/pundun.git
-WORKDIR ./pundun/
+WORKDIR pundun/
 RUN make package RELEASE=1
 RUN ls package/packages/*.rpm | xargs rpm -Uvh
 RUN echo 'pundun:pundun' | chpasswd
