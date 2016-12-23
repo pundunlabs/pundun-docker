@@ -15,8 +15,6 @@ if [ "$(docker images -q pundunlabs/pundun-$tag:centos-6.7 2> /dev/null)" = "" ]
 {
     _dockerize $tag centos-6.7
     _dockerize $tag ubuntu-16.04
-    docker rm -v $(docker ps -a -q -f status=exited)
-    docker images -q --filter "dangling=true" | xargs docker rmi
 }
 else
     echo "image already pulled."
