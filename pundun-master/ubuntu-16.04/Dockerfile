@@ -1,18 +1,17 @@
 FROM pundunlabs/pundun-ready:ubuntu-16.04
 
-RUN useradd -m pundun
-RUN echo 'pundun:pundun' | chpasswd
-
-USER pundun
-RUN mkdir /home/pundun/artifacts 
-WORKDIR /home/pundun/artifacts/
+RUN mkdir artifacts
+WORKDIR artifacts/
 RUN git clone https://github.com/pundunlabs/pundun.git
-WORKDIR /home/pundun/artifacts/pundun/
-RUN rebar3 as target tar
-RUN mv _build/target/rel/pundun/pundun-v1.0.0.tar.gz /home/pundun/
-WORKDIR /home/pundun/
-RUN tar xzf pundun-v1.0.0.tar.gz
-RUN echo "export PATH=/home/pundun/bin:$PATH" >> .bashrc
-USER root
+WORKDIR pundun/
+RUN export DEBUG=1
+RUN make package RELEASE=1
+RUN mv package/packages/pundun*.deb /var/cache/apt/archives/
+RUN ls /var/cache/apt/archives/pundun*.deb | xargs dpkg -i
+RUN mkdir /var/lib/pundun/packages
+RUN chown pundun:pundun /var/lib/pundun/packages/
+RUN cp /var/cache/apt/archives/pundun*.deb /var/lib/pundun/packages/
+RUN echo 'pundun:pundun' | chpasswd
+RUN service pundun start
 EXPOSE 8887 8886
 CMD ["/usr/sbin/sshd", "-D"]

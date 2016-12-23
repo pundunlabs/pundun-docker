@@ -1,7 +1,7 @@
 FROM centos:6.7
 
 RUN yum -y install centos-release-SCL
-RUN yum -y install sudo wget openssh openssh-server passwd expat-devel libcurl-devel perl-devel gettext asciidoc zlib1g-dev ncurses-devel autoconf openssl-devel unzip devtoolset-4; yum clean all
+RUN yum -y install sudo wget openssh openssh-server passwd expat-devel libcurl-devel perl-devel gettext asciidoc zlib1g-dev ncurses-devel autoconf openssl-devel unzip devtoolset-4 rebar rpm-build; yum clean all
 
 RUN scl enable devtoolset-4 bash
 
@@ -37,8 +37,9 @@ WORKDIR ./rebar3
 RUN git checkout 3.3.2
 RUN ./bootstrap
 RUN cp rebar3 /usr/local/bin/
-WORKDIR ~/
-
+WORKDIR /root/
+RUN wget https://github.com/rebar/rebar/wiki/rebar -P /usr/bin/
+RUN chmod +x /usr/bin/rebar
 RUN rm -rf otp_src_19.1/ rebar3/ git-2.11.0/ v2.11.0.zip otp_src_19.1.tar.gz
 EXPOSE 22
 CMD ["/usr/sbin/sshd", "-D"]

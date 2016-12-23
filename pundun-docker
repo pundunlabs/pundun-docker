@@ -41,15 +41,20 @@ RUN git fetch -t \
 RUN git checkout -b '"$tag"' '"$tag"' ' $2/*/Dockerfile
 		sed -i 's/pundun-v\([0-9]\+\.\)\([0-9]\+\.\)\([0-9]\+\)/'"$2"'/g ' $2/*/Dockerfile
 	    fi
-	    (cd $2/$3; docker build --no-cache -t pundunlabs/$2:$3 .)
+	    if [$2 = "pundun-ready"]; then
+		NO_CACHE=""
+	    else
+		NO_CACHE="--no-cache"
+	    fi
+	    (cd $2/$3; docker build $NO_CACHE -t pundunlabs/$2:$3 .)
 	    ;;
 	"attach")
 	    ipport=`docker port $2-$3 22`
 	    port=`echo ${ipport##*:}`
 	    ssh pundun@0.0.0.0 -p $port -t '/bin/bash'
 	    ;;
-	"fetch_tar")
-	    docker cp $2-$3:/home/pundun/$2.tar.gz .
+	"fetch_package")
+	    docker cp $2-$3:/var/lib/pundun/packages .
 	    ;;
 	*)
 	    print_usage

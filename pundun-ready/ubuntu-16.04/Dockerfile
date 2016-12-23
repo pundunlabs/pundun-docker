@@ -1,7 +1,7 @@
 FROM ubuntu:16.04
 
 RUN apt-get update
-RUN apt-get -y install sudo wget build-essential autoconf libncurses5-dev openssl libssl-dev fop xsltproc unixodbc-dev git openssh-server
+RUN apt-get -y install sudo wget build-essential autoconf libncurses5-dev openssl libssl-dev fop xsltproc unixodbc-dev git openssh-server rebar devscripts debhelper lintian
 
 RUN mkdir /var/run/sshd
 RUN echo 'root:root' | chpasswd
@@ -26,7 +26,10 @@ RUN git clone https://github.com/erlang/rebar3.git
 WORKDIR ./rebar3
 RUN git checkout 3.3.2
 RUN ./bootstrap
-RUN cp rebar3 /usr/local/bin/
+RUN cp rebar3 /usr/bin/
 RUN rm -rf otp_src_19.1/ rebar3/ otp_src_19.1.tar.gz
+WORKDIR /root/
+RUN wget https://github.com/rebar/rebar/wiki/rebar -P /usr/bin/
+RUN chmod +x /usr/bin/rebar
 EXPOSE 22
 CMD ["/usr/sbin/sshd", "-D"]
