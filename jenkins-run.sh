@@ -7,6 +7,7 @@ _dockerize(){
     ./pundun-docker rm pundun-$1 $2
     mkdir -p ../archive/$2
     mv packages/* ../archive/$2/
+    ./pundun-docker install pundun-$1 $2
     docker push pundunlabs/pundun-$1:$2
 }
 

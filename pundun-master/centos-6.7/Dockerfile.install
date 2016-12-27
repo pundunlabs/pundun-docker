@@ -1,0 +1,9 @@
+FROM centos:6.7
+
+RUN yum -y install initscripts sudo wget vim; yum clean all
+COPY packages/*.rpm ./
+RUN ls *.rpm | grep -v src | xargs rpm -Uvh
+RUN echo 'pundun:pundun' | chpasswd
+RUN service pundun start
+EXPOSE 8887 8886
+CMD ["/usr/sbin/sshd", "-D"]

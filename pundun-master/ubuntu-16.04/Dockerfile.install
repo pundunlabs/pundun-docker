@@ -1,0 +1,11 @@
+FROM ubuntu:16.04
+
+RUN apt-get update
+RUN apt-get -y install sudo wget vim
+COPY packages/pundun*.deb .
+RUN mv pundun*.deb /var/cache/apt/archives/
+RUN ls /var/cache/apt/archives/pundun*.deb | xargs dpkg -i
+RUN echo 'pundun:pundun' | chpasswd
+RUN service pundun start
+EXPOSE 8887 8886
+CMD ["/usr/sbin/sshd", "-D"]

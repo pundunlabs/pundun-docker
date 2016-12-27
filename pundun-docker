@@ -13,7 +13,7 @@ print_git_tags()
 
 print_usage()
 {
-    echo "usage: pundun-docker COMMAND\n\rCOMMAND:\n\r\t build REPO TAG | run REPO TAG | stop REPO TAG | rm REPO TAG | attach REPO TAG\n\rREPO:\n\r\t pundun-ready | pundun-master" `print_git_tags` "\n\rTAG:\n\r\t ubuntu-16.04 | centos-6.7"
+    echo "usage: pundun-docker COMMAND\n\rCOMMAND:\n\r\t build REPO TAG | install REPO TAG | run REPO TAG | stop REPO TAG | rm REPO TAG | attach REPO TAG | fetch_package REPO TAG\n\rREPO:\n\r\t pundun-ready | pundun-master" `print_git_tags` "\n\rTAG:\n\r\t ubuntu-16.04 | centos-6.7"
 }
 
 if [ -z $2 ] || [ -z $3 ]; then
@@ -28,6 +28,9 @@ else
 	    ;;
 	"rm")
 	    docker rm $2-$3
+	    ;;
+	"install")
+	    docker build -f pundun-master/$3/Dockerfile.install --no-cache -t pundunlabs/$2:$3 .
 	    ;;
 	"build")
 	    if [ ! -d "$2" ]; then
@@ -45,7 +48,7 @@ RUN git checkout -b '"$tag"' '"$tag"' ' $2/*/Dockerfile
 	    else
 		NO_CACHE="--no-cache"
 	    fi
-	    (cd $2/$3; docker build $NO_CACHE -t pundunlabs/$2:$3 .)
+	    (cd $2/$3; docker build $NO_CACHE -t pundunlabs/$2".build":$3 .)
 	    ;;
 	"attach")
 	    ipport=`docker port $2-$3 22`
