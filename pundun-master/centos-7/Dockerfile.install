@@ -1,5 +1,5 @@
-FROM centos:6.7
+FROM centos:7
 
 RUN yum -y install openssh-server sudo wget vim; yum clean all
-EXPOSE 22 8887 8886 8885 8884
+EXPOSE 22 8887 8886 8885 8884 
 CMD ["/usr/sbin/sshd", "-D"]
