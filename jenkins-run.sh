@@ -17,7 +17,7 @@ dcleanup(){
 }
 
 tag="$(git ls-remote --tags https://github.com/pundunlabs/pundun.git | cut -d "/" -f 3 |grep -v -|grep -v {| sort -n -t. -k1 -k2 -k3 -r | head -n1)"
-if [ "$(docker images -q pundunlabs/pundun-$tag:centos-6.7 2> /dev/null)" = "" ]; then
+if [ "$(docker images -q pundunlabs/pundun-$tag:centos-7 2> /dev/null)" = "" ]; then
 {
     _dockerize $tag centos-6.7
     _dockerize $tag centos-7

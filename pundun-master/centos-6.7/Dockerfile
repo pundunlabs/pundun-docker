@@ -3,7 +3,7 @@ FROM pundunlabs/pundun-ready:centos-6.7
 ENV PATH=/opt/rh/devtoolset-4/root/usr/bin:$PATH
 RUN echo 'source scl_source enable devtoolset-4' >> ~/.bashrc
 RUN source scl_source enable devtoolset-4
-RUN mkdir artifacts 
+RUN mkdir artifacts
 WORKDIR ./artifacts/
 RUN git clone https://github.com/pundunlabs/pundun.git
 WORKDIR pundun/
