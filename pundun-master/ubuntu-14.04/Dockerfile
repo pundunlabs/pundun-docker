@@ -12,6 +12,5 @@ RUN mkdir /var/lib/pundun/packages
 RUN chown pundun:pundun /var/lib/pundun/packages/
 RUN cp /var/cache/apt/archives/pundun*.deb /var/lib/pundun/packages/
 RUN echo 'pundun:pundun' | chpasswd
-RUN service pundun start
 EXPOSE 8887 8886 8885 8884
 CMD ["/usr/sbin/sshd", "-D"]

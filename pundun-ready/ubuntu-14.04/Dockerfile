@@ -1,7 +1,11 @@
 FROM ubuntu:14.04
 
 RUN apt-get update
-RUN apt-get -y install sudo wget build-essential autoconf libncurses5-dev openssl libssl-dev fop xsltproc unixodbc-dev git openssh-server rebar devscripts debhelper lintian
+RUN apt-get -y install sudo wget build-essential autoconf libncurses5-dev openssl libssl-dev fop xsltproc unixodbc-dev git openssh-server devscripts debhelper lintian
+
+RUN wget https://github.com/rebar/rebar/wiki/rebar
+RUN chmod +x rebar
+RUN mv rebar /usr/bin/rebar
 
 RUN mkdir /var/run/sshd
 RUN echo 'root:root' | chpasswd

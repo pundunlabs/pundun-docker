@@ -4,7 +4,7 @@ RUN yum -y install --setopt=tsflags=nodocs centos-release-scl
 RUN yum -y update --setopt=tsflags=nodocs
 RUN yum -y install --skip-broken --setopt=tsflags=nodocs devtoolset-4
 RUN scl enable devtoolset-4 bash
-RUN yum -y install --setopt=tsflags=nodocs sudo wget openssh openssh-server passwd expat-devel libcurl-devel perl-devel gettext asciidoc zlib1g-dev ncurses-devel autoconf openssl-devel unzip rebar rpm-build; yum clean all
+RUN yum -y install --setopt=tsflags=nodocs sudo which wget openssh openssh-server passwd expat-devel libcurl-devel perl-devel gettext asciidoc zlib1g-dev ncurses-devel autoconf openssl-devel unzip rebar rpm-build; yum clean all
 
 RUN wget https://github.com/git/git/archive/v2.11.0.zip
 RUN unzip v2.11.0.zip
