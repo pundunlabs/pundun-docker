@@ -14,5 +14,5 @@ RUN mkdir /var/lib/pundun/packages
 RUN chown pundun:pundun /var/lib/pundun/packages/
 RUN cp package/packages/*.rpm /var/lib/pundun/packages/
 RUN /sbin/service pundun start
-EXPOSE 8887 8886
+EXPOSE 8887 8886 8885 8884
 CMD ["/usr/sbin/sshd", "-D"]

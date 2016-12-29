@@ -1,9 +1,10 @@
 FROM centos:6.7
 
-RUN yum -y install centos-release-SCL
-RUN yum -y install sudo wget openssh openssh-server passwd expat-devel libcurl-devel perl-devel gettext asciidoc zlib1g-dev ncurses-devel autoconf openssl-devel unzip devtoolset-4 rebar rpm-build; yum clean all
-
-RUN scl enable devtoolset-4 bash
+RUN yum -y update --setopt=tsflags=nodocs
+RUN yum -y install --setopt=tsflags=nodocs scl-utils centos-release-SCL
+RUN yum -y install --setopt=tsflags=nodocs sudo wget openssh openssh-server passwd expat-devel libcurl-devel perl-devel gettext asciidoc zlib2g-dev ncurses-devel autoconf openssl-devel unzip rebar rpm-build
+RUN yum -y install --setopt=tsflags=nodocs devtoolset-4-toolchain && yum  clean all
+ENV PATH=/opt/rh/devtoolset-4/root/usr/bin:$PATH
 
 RUN wget https://github.com/git/git/archive/v2.11.0.zip
 RUN unzip v2.11.0.zip
@@ -23,9 +24,9 @@ RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so
 ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
 
-RUN wget http://erlang.org/download/otp_src_19.1.tar.gz -P .
-RUN tar xzfv otp_src_19.1.tar.gz
-WORKDIR ./otp_src_19.1/
+RUN wget http://erlang.org/download/otp_src_19.2.tar.gz -P .
+RUN tar xzfv otp_src_19.2.tar.gz
+WORKDIR ./otp_src_19.2/
 RUN ./configure --prefix=/usr/local/erlang/ --enable-dirty-schedulers
 RUN make
 RUN sudo make install
@@ -40,6 +41,6 @@ RUN cp rebar3 /usr/local/bin/
 WORKDIR /root/
 RUN wget https://github.com/rebar/rebar/wiki/rebar -P /usr/bin/
 RUN chmod +x /usr/bin/rebar
-RUN rm -rf otp_src_19.1/ rebar3/ git-2.11.0/ v2.11.0.zip otp_src_19.1.tar.gz
+RUN rm -rf otp_src_19.2/ rebar3/ git-2.11.0/ v2.11.0.zip otp_src_19.2.tar.gz
 EXPOSE 22
 CMD ["/usr/sbin/sshd", "-D"]

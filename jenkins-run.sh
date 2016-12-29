@@ -1,14 +1,11 @@
 #!/bin/sh
 _dockerize(){
     ./pundun-docker build pundun-$1 $2
-    ./pundun-docker run pundun-$1 $2
     ./pundun-docker fetch_package pundun-$1 $2
-    ./pundun-docker stop pundun-$1 $2
-    ./pundun-docker rm pundun-$1 $2
     mkdir -p ../archive/$2
     mv packages/* ../archive/$2/
     ./pundun-docker install pundun-$1 $2
-    docker push pundunlabs/pundun-$1:$2
+    #docker push pundunlabs/pundun-$1:$2
 }
 
 dcleanup(){

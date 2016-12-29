@@ -14,9 +14,9 @@ ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
 
 RUN mkdir /usr/local/erlang
-RUN wget http://erlang.org/download/otp_src_19.1.tar.gz
-RUN tar xzfv otp_src_19.1.tar.gz
-WORKDIR ./otp_src_19.1/
+RUN wget http://erlang.org/download/otp_src_19.2.tar.gz
+RUN tar xzfv otp_src_19.2.tar.gz
+WORKDIR ./otp_src_19.2/
 RUN ./configure --prefix=/usr/local/erlang/ --enable-dirty-schedulers
 RUN make
 RUN make install
@@ -27,7 +27,7 @@ WORKDIR ./rebar3
 RUN git checkout 3.3.2
 RUN ./bootstrap
 RUN cp rebar3 /usr/bin/
-RUN rm -rf otp_src_19.1/ rebar3/ otp_src_19.1.tar.gz
+RUN rm -rf otp_src_19.2/ rebar3/ otp_src_19.2.tar.gz
 WORKDIR /root/
 RUN wget https://github.com/rebar/rebar/wiki/rebar -P /usr/bin/
 RUN chmod +x /usr/bin/rebar
