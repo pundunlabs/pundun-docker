@@ -2,6 +2,7 @@ FROM ubuntu:16.04
 
 RUN apt-get update
 RUN apt-get -y install sudo wget vim openssh-server
+RUN echo 'root:root' | chpasswd
 EXPOSE 22 8887 8886 8885 8884
 RUN mkdir -p /var/run/sshd
 CMD ["/usr/sbin/sshd", "-D"]
