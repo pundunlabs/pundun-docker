@@ -25,4 +25,4 @@ else
     echo "image already pulled."
 fi
 #Cleanup dangling images
-dcleanup
+dcleanup || exit 0
