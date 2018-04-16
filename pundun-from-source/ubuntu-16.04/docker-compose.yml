@@ -1,0 +1,22 @@
+version: '3'
+services:
+    pundun0:
+        image: pundunlabs/pundun-v1.0.8:ubuntu-16.04
+        ports:
+            - 18887:8887
+            - 18884:8884
+            - 14369:4369
+            - 30000:50000
+            - 30001:50001
+        container_name: host0
+        hostname: host0
+    pundun1:
+        image: pundunlabs/pundun-v1.0.8:ubuntu-16.04
+        ports:
+            - 28887:8887
+            - 28884:8884
+            - 24369:4369
+            - 40000:50000
+            - 40001:50001
+        container_name: host1
+        hostname: host1
